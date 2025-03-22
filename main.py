@@ -12,11 +12,15 @@ def main():
     pygame.init()
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     clock = pygame.time.Clock()
+    score = 0
+
+    font = pygame.font.Font(None, 36)
 
     updatable = pygame.sprite.Group()
     drawable = pygame.sprite.Group()
     asteroids = pygame.sprite.Group()
     shots = pygame.sprite.Group()
+    bg_image = pygame.image.load('background.jpeg')
 
 
     Player.containers = (updatable, drawable)
@@ -30,6 +34,8 @@ def main():
     dt = 0
 
     while True:
+        screen.blit(bg_image,(0,0))
+    
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return
@@ -39,18 +45,27 @@ def main():
             uhohcheck = ass.collision(player)
             if uhohcheck == True:
                 print("Game Over!")
+                print(score)
                 sys.exit()
         
         for ass in asteroids:
             for bull in shots:
                 bullcheck = bull.collision(ass)
                 if bullcheck == True:
-                   ass.kill()
+                   bull.kill()
+                   ass.split()
+                   score += 10
 
-        screen.fill("black")
+        
+        score_text = font.render(f"Score: {score}", True, (255, 255, 255))  # White text
+        score_rect = score_text.get_rect()
+        score_rect.topleft = (10, 10)
 
         for obj in drawable:
             obj.draw(screen)
+
+        screen.blit(score_text, score_rect)
+
 
         pygame.display.flip()
 
