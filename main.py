@@ -41,6 +41,11 @@ def main():
                 print("Game Over!")
                 sys.exit()
         
+        for ass in asteroids:
+            for bull in shots:
+                bullcheck = bull.collision(ass)
+                if bullcheck == True:
+                   ass.kill()
 
         screen.fill("black")
 
